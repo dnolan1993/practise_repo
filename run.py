@@ -57,9 +57,6 @@ def hit_ships(board):
     return count
 
 
-hits = hit_ships(player_board)
-
-
 def run_game():
     turns = 20
     for turns in range(20):
@@ -79,7 +76,7 @@ def run_game():
             elif player_board[row][column] == "-":
                 print("Positioned already guessed!")
                 turns -= 1
-            if hits == 5:
+            if hit_ships(player_board) == 5:
                 print("All ships have been sunk, Congratulations, You win!")
                 break
             print(f"You have {turns} turns remaining")
