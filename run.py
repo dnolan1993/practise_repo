@@ -31,24 +31,24 @@ def create_ships(board):
 
 
 def get_ship_row():
-    guess_row = input("Please enter a ship row between 1 and 8: ")
+    guess_row = input("Please guess a row between 1 and 8: ")
     for i in row_list:
         return i
     while guess_row not in i:
         print("Please enter a valid row")
-        guess_row = input("Please enter a ship row between 1 and 8: ")
+        guess_row = input("Please guess a row between 1 and 8: ")
     return int(guess_row) 
 
 
 def get_ship_column():
-    guess_column = input("Please enter a ship column A-H: ")
+    guess_column = input("Please guess a column A-H: ")
     while guess_column not in column_list:
         print("Please enter a valid column (A-H): ")
-        guess_column = input("Please enter a ship column A-H: ")
+        guess_column = input("Please guess a column A-H: ")
     return guess_column.upper()
 
 
-def count_hit_ships(board):
+def hit_ships(board):
     count = 0
     for row in board(board):
         for column in row:
@@ -57,7 +57,7 @@ def count_hit_ships(board):
     return count
 
 
-#hits = count_hit_ships(player_board)
+hits = hit_ships(player_board)
 
 
 def run_game():
@@ -79,8 +79,8 @@ def run_game():
             elif player_board[row][column] == "-":
                 print("Positioned already guessed!")
                 turns -= 1
-            if count_hit_ships(player_board) == 5:
-                print("All battleships have been sunk, Congratulations, You win!")
+            if hits == 5:
+                print("All ships have been sunk, Congratulations, You win!")
                 break
             print(f"You have {turns} turns remaining")
             if turns == 0:
@@ -94,7 +94,6 @@ def main():
     print(opponent_ship_row)
     print(opponent_ship_column)
     run_game()
-    #print(hits)
     
 
 main()
