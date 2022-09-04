@@ -4,7 +4,7 @@ opponent_board = [[" O "] * 8 for x in range(8)]
 player_board = [[" O "] * 8 for x in range(8)]
 
 row_list = [1, 2, 3, 4, 5, 6, 7, 8]
-column_list = {"A":1, "B":2, "C":3, "D":4, "E":5, "F":6, "G":7, "H":8}
+column_list = {"A": 1, "B": 2, "C": 3, "D": 4, "E": 5, "F": 6, "G": 7, "H": 8}
 
 
 def print_board(board):
@@ -21,20 +21,20 @@ opponent_ship_column = []
 
 
 def create_ships(board):
-    for ship in range(5):
+    # for ship in range(5):
+    ship_row, ship_column = randint(0, 7), randint(0, 7)
+    while board[ship_row][ship_column] == " X ":
         ship_row, ship_column = randint(0, 7), randint(0, 7)
-        while board[ship_row][ship_column] == " X ":
-            ship_row, ship_column = randint(0, 7), randint(0, 7)
-        board[ship_row][ship_column] = " X "
-        opponent_ship_row.append(ship_row)
-        opponent_ship_column.append(ship_column)
+    board[ship_row][ship_column] = " X "
+    opponent_ship_row.append(ship_row)
+    opponent_ship_column.append(ship_column)
 
 
 def get_ship_row():
     guess_row = int(input("Please guess a row between 1 and 8: "))
     for i in row_list:
         return row_list[guess_row] -2
-    while guess_row not in i:
+    while guess_row not in row_list:
         print("Please enter a valid row")
         guess_row = input("Please guess a row between 1 and 8: ")
         return row_list[guess_row] -2
@@ -52,27 +52,33 @@ def hit_ships(board):
     count = 0
     for row in board:
         for column in row:
-            if column == "X":
+            if column == " X ":
                 count += 1
     return count
 
 
 def run_game():
-    for ship_row in opponent_ship_row:
-        for ship_column in opponent_ship_column:
-            print("Welcome to Battleship")
+    print("Welcome to Battleship")
+    for turns in range(10):
+        while turns <11:
             print_board(player_board)
             row = get_ship_row()
             column = get_ship_column()
-            if row != opponent_ship_row  and column != opponent_ship_column :
+            if row not in opponent_ship_row and column not in opponent_ship_column:
                 print("It's a miss!")
                 player_board[row][column] = " - "
-            elif row == opponent_ship_row  and column == opponent_ship_column:
+                turns += 1
+                print(f"You have 10-{turns} turns remaining")
+            elif row in opponent_ship_row and column in opponent_ship_column:
                 print("Congratulations, It's a hit!")
                 player_board[row][column] = " X "
+                turns += 1
+                print(f"You have 10-{turns} turns remaining")
             elif player_board[row][column] == "-":
                 print("Positioned already guessed!")
-            if hit_ships(player_board) == 5:
+                turns += 1
+                print(f"You have 10-{turns} turns remaining")
+            if hit_ships(player_board) == 1:
                 print("All ships have been sunk, Congratulations, You win!")
                 break
 
