@@ -59,28 +59,29 @@ def hit_ships(board):
 
 def run_game():
     print("Welcome to Battleship")
-    for turns in range(10):
-        while turns <11:
+    for turns in range(20):
+        turns = 20
+        while turns > 0:
             print_board(player_board)
             row = get_ship_row()
             column = get_ship_column()
-            if row not in opponent_ship_row and column not in opponent_ship_column:
+            if row not in opponent_ship_row or column not in opponent_ship_column:
                 print("It's a miss!")
                 player_board[row][column] = " - "
-                turns += 1
-                print(f"You have 10-{turns} turns remaining")
+                turns -= 1
+                print(f"You have {turns} turns remaining")
             elif row in opponent_ship_row and column in opponent_ship_column:
                 print("Congratulations, It's a hit!")
                 player_board[row][column] = " X "
-                turns += 1
-                print(f"You have 10-{turns} turns remaining")
-            elif player_board[row][column] == "-":
+                turns -= 1
+                print(f"You have {turns} turns remaining")
+            elif player_board[row][column] == " - ":
                 print("Positioned already guessed!")
-                turns += 1
-                print(f"You have 10-{turns} turns remaining")
-            if hit_ships(player_board) == 1:
+                turns -= 1
+                print(f"You have {turns} turns remaining")
+            elif hit_ships(player_board) == 1:
                 print("All ships have been sunk, Congratulations, You win!")
-                break
+                break              
 
 
 def main():
