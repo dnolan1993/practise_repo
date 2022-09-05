@@ -185,6 +185,9 @@ def make_a_move(board, coordinate):
         board[row][col] = "X"
     elif get_coordinate_value(board, row, col) == "-":
         print("Positioned already guessed!")
+        return None
+    
+    return board
 
 
 def check_win(board):
@@ -192,7 +195,7 @@ def check_win(board):
     Check if all ships have been hit
     """
     if hit_ships(board) == 10:
-        print(f"Game Over! all ship on {board} have been sunk!")
+        print(f"Game Over! all ship on have been sunk!")
 
 
 def hit_ships(board):  
@@ -210,20 +213,25 @@ def run_game(turns, player_board, opponent_board):
     """Runs the main game loop"""
 
     while turns > 0:
-
+        # Players turn
         coordinate = get_player_coordinate()
         make_a_move(player_board, coordinate)
+        if player_board == None:
+            break # restart if coordinate already selected
         if check_win(player_board):
             turns -= 1
             return player_board
-
+        # Computers turn
         coordinate = get_computer_coordinate()
         make_a_move(opponent_board, coordinate)
+        if opponent_board == None:
+            break # restart if coordinate already selected
         if check_win(opponent_board):
             turns -= 1
             return opponent_board
     
-    return None
+        print_board(opponent_board, opponent=True)
+        print_board(player_board)
 
     # print(f"Welcome to Battleship! You have {turns} to try beat hit as many ships as possible")
     # while turns > 0:
