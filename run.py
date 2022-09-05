@@ -60,7 +60,7 @@ def hit_ships(board):
 def run_game():
     print("Welcome to Battleship")
     for turns in range(20):
-        turns = 20
+        turns = 5
         while turns > 0:
             print_board(player_board)
             row = get_ship_row()
@@ -77,11 +77,12 @@ def run_game():
                 print(f"You have {turns} turns remaining")
             elif player_board[row][column] == " - ":
                 print("Positioned already guessed!")
-                turns -= 1
                 print(f"You have {turns} turns remaining")
             elif hit_ships(player_board) == 1:
                 print("All ships have been sunk, Congratulations, You win!")
-                break              
+                break
+    if turns == 0:
+        print("You have used all your turns, Game Over!")  
 
 
 def main():
