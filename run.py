@@ -1,8 +1,5 @@
 from random import randint
 
-# row_heading = [1, 2, 3, 4, 5, 6, 7, 8]
-# column_list = {"A": 1, "B": 2, "C": 3, "D": 4, "E": 5, "F": 6, "G": 7, "H": 8}
-
 opponent_ship_row = []
 opponent_ship_column = []
 
@@ -209,16 +206,6 @@ def hit_ships(board):
     return count
 
 
-#def determine_winner(board_1, board_2):
- #   """
-  #  Finds which player has won game
-   # """
-    #if hit_ships(board_1) == 1:
-     #   return "player"
-    #elif hit_ships(board_2) == 1:
-     #   return "comp"
-
-
 def print_winner(winner):
     """
     Prints winner when all ships on either board are sunk
@@ -253,37 +240,9 @@ def run_game(turns, player_board, opponent_board):
         print_board(player_board)
         turns -= 1
     return "Draw"
-
-
-
-
-    # print(f"Welcome to Battleship! You have {turns} to try beat hit as many ships as possible")
-    # while turns > 0:
-    #     print_board(player_board)
-    #     row = get_ship_row()
-    #     column = get_ship_column()
-    #     if row not in opponent_ship_row or column not in opponent_ship_column:
-    #         print("It's a miss!")
-    #         player_board[row][column] = " - "
-    #         turns -= 1
-    #         print(f"You have {turns} turns remaining")
-    #     elif row in opponent_ship_row and column in opponent_ship_column:
-    #         print("Congratulations, It's a hit!")
-    #         player_board[row][column] = " X "
-    #         turns -= 1
-    #         print(f"You have {turns} turns remaining")
-    #     elif player_board[row][column] == " - ":
-    #         print("Positioned already guessed!")
-    #         print(f"You have {turns} turns remaining")
-    #     elif hit_ships(player_board) == 1:
-    #         print("All ships have been sunk, Congratulations, You win!")
-    #         break
-    # print("You have used all your turns, Game Over!")  
-
+  
 
 def main():
-
-    # this is a list of rows, row is a list of columns
     #  = empty place
     # - = a missed shot
     # * = a hit shot
@@ -299,14 +258,8 @@ def main():
     print_board(player_board)
 
     winner = run_game(10, player_board, opponent_board)
-
+    print("hello")
     print_winner(winner)
 
-    # create_ships(opponent_board)
-    # print_board(opponent_board)
-    # print(f"Row {opponent_ship_row}")
-    # print(f"Column {opponent_ship_column}")
-    # run_game()
     
-
 main()
