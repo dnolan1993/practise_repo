@@ -33,9 +33,9 @@ def check_for_oob(board, coordinates):
     For a given list of ship coordinates check if any are oob for the board
     """
     for i in coordinates:
-        if i[0] < 0 or i[0] > len(board)-1: # Board is a list of rows
+        if i[0] < 0 or i[0] > len(board)-1:  # Board is a list of rows
             return True
-        elif i[1] < 0 or i[1] > len(board[0])-1: # Each row is a list of cols
+        elif i[1] < 0 or i[1] > len(board[0])-1:  # Each row is a list of cols
             return True
     return False
 
@@ -53,7 +53,7 @@ def check_ship_conflict(board, coordinates):
 
 def check_valid_placement(board, coordinates):
     """
-    Given a board and set of coordinates 
+    Given a board and set of coordinates
     return if its a valid place to place a ship
     """
     if check_for_oob(board, coordinates):
@@ -114,9 +114,9 @@ def generate_ship_coordinates(length, row, col):
         for i in range(length):
             coordinates.append([row, col - i])
 
-    else: # Right
+    else:  # Right
         for i in range(length):
-            coordinates.append([row, col + i])   
+            coordinates.append([row, col + i])
     return coordinates
 
 
@@ -139,9 +139,9 @@ def create_ships(board, ships):
         valid_placement = False
         while not valid_placement:
             row, col = get_empty_coordinate(board)
-            coordinates = generate_ship_coordinates(i, row, col)          
+            coordinates = generate_ship_coordinates(i, row, col)
             if check_valid_placement(board, coordinates):
-                valid_placement = True 
+                valid_placement = True
 
         board = place_ship_on_board(board, coordinates)
     return board
@@ -154,15 +154,15 @@ def get_ship_row():
     try:
         guess_row = int(input("Please guess a row between 1 and 8: "))
         if guess_row <= 8 and guess_row > 0:
-            return guess_row -1
+            return guess_row - 1
         else:
             print("please enter valid row number")
             guess_row = int(input("Please guess a row between 1 and 8: "))
-            return guess_row -1
+            return guess_row - 1
     except ValueError:
         print("You must guess a number")
         guess_row = int(input("Please guess a row between 1 and 8: "))
-        return guess_row -1
+        return guess_row - 1
 
 
 def get_ship_column():
@@ -211,14 +211,13 @@ def make_a_move(board, coordinate):
     elif get_coordinate_value(board, row, col) == "-":
         print("Positioned already guessed!")
         return None
-    
     return board
 
 
-def hit_ships(board):  
+def hit_ships(board):
     """
     Count the amount of hits on chosen board
-    """ 
+    """
     count = 0
     for row in board:
         for column in row:
@@ -252,13 +251,12 @@ def run_game(turns, player_board, opponent_board):
 
     while turns > 0:
         # Players turn
-        coordinate = get_player_coordinate() 
+        coordinate = get_player_coordinate()
         if opponent_board is None:
-            break # restart if coordinate already selected
+            break  # Restart if coordinate already selected
         make_a_move(opponent_board, coordinate)
         if check_win(opponent_board):
             return "Player"
-   
         # Computers turn
         coordinate = get_computer_coordinate(player_board)
         make_a_move(player_board, coordinate)
@@ -278,7 +276,6 @@ def main():
     """
     Calls all functions needed to run game
     """
-    
     opponent_board = [[" "] * 8 for x in range(8)]
     player_board = [[" "] * 8 for x in range(8)]
     ships = [2, 4, 4]
@@ -295,5 +292,4 @@ def main():
     winner = run_game(20, player_board, opponent_board)
     print_winner(winner, player_board, opponent_board)
 
-    
 main()
