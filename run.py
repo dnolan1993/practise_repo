@@ -5,8 +5,9 @@ opponent_ship_column = []
 
 
 def print_board(board, opponent=False):
-    """ for a given board print it to the terminal """
-    
+    """
+    For a given board print it to the terminal
+    """
     if opponent:
         print("---------Opponents Board----------")
     else:
@@ -18,48 +19,61 @@ def print_board(board, opponent=False):
     for row in board:
         col_str = f"{row_number} |"
         for col in row:
-                if opponent and col == "#":
-                    val = " "
-                else:
-                    val = col
-                col_str += f" {val} |"
+            if opponent and col == "#":
+                val = " "
+            else:
+                val = col
+            col_str += f" {val} |"
         print(col_str)
         row_number += 1
 
-def check_for_oob(board, coordinates ):
-    """for a given list of ship coordinates check if any are oob for the board"""
+
+def check_for_oob(board, coordinates):
+    """
+    For a given list of ship coordinates check if any are oob for the board
+    """
     for i in coordinates:
-        if i[0] < 0 or i[0] > len(board)-1: #board is a list of rows
+        if i[0] < 0 or i[0] > len(board)-1: # Board is a list of rows
             return True
-        elif i[1] < 0 or i[1] > len(board[0])-1: #each row is a list of cols
+        elif i[1] < 0 or i[1] > len(board[0])-1: # Each row is a list of cols
             return True
     return False
 
-def check_ship_conflict(board, coordinates ):
-    """for a given set of coordinates see if they conflict with other ships"""
+
+def check_ship_conflict(board, coordinates):
+    """
+    For a given set of coordinates see if they conflict with other ships
+    """
     for coordinate in coordinates:
         row, col = coordinate[0], coordinate[1]
         if get_coordinate_value(board, row, col) == "#":
             return True
     return False
 
-def check_valid_placement(board, coordinates):
-    """Given a board and set of coordinate 
-    return if its a valid place to place a ship"""
 
+def check_valid_placement(board, coordinates):
+    """
+    Given a board and set of coordinates 
+    return if its a valid place to place a ship
+    """
     if check_for_oob(board, coordinates):
         return False
     elif check_ship_conflict(board, coordinates):
         return False
-    
     return True
 
+
 def get_coordinate_value(board, row, col):
-    """for a given board return the value of a coordinate"""
+    """
+    For a given board return the value of a coordinate
+    """
     return board[row][col]
 
+
 def get_empty_coordinate(board):
-    """for a given board find a random empty coordinate"""
+    """
+    For a given board find a random empty coordinate
+    """
     empty = False
 
     while not empty:
@@ -67,21 +81,24 @@ def get_empty_coordinate(board):
         coordinate_value = get_coordinate_value(board, row, col)
         if coordinate_value == " ":
             empty = True
-    
     return row, col
 
+
 def get_random_direction():
-    """return a random direction"""
-    directions = {  0: "up",
-                    1:  "down",
-                    2: "left",
-                    3: "right" }
-    
-    return  directions[randint(0, 3)]
+    """
+    Return a random direction
+    """
+    directions = {0: "up",
+                  1: "down",
+                  2: "left",
+                  3: "right"}
+    return directions[randint(0, 3)]
+
 
 def generate_ship_coordinates(length, row, col):
-    """"given a start point generate a set of coordinates for a ship"""
-    
+    """"
+    Given a start point generate a set of coordinates for a ship
+    """
     direction = get_random_direction()
     coordinates = []
 
@@ -97,44 +114,56 @@ def generate_ship_coordinates(length, row, col):
         for i in range(length):
             coordinates.append([row, col - i])
 
-    else: #right
+    else: # Right
         for i in range(length):
-            coordinates.append([row, col + i])
-        
+            coordinates.append([row, col + i])   
     return coordinates
 
+
 def place_ship_on_board(board, ship_coordinates):
-    """Given a board and a ships coordinates update the board
-    with the ship and return the updated board"""
-    
+    """
+    Given a board and a ships coordinates update the board
+    with the ship and return the updated board
+    """
     for coordinate in ship_coordinates:
-         row, col = coordinate[0], coordinate[1]
-         board[row][col] = "#"
-    
+        row, col = coordinate[0], coordinate[1]
+        board[row][col] = "#"
     return board
 
+
 def create_ships(board, ships):
-    """for a given board place the number of ships required"""
+    """
+    For a given board place the number of ships required
+    """
     for i in ships:
         valid_placement = False
         while not valid_placement:
             row, col = get_empty_coordinate(board)
-            coordinates = generate_ship_coordinates(i, row, col)
-           
+            coordinates = generate_ship_coordinates(i, row, col)          
             if check_valid_placement(board, coordinates):
                 valid_placement = True 
 
         board = place_ship_on_board(board, coordinates)
     return board
 
+
 def get_ship_row():
     """
     Allow player to input a guess for row value
     """
-    guess_row = 0
-    while not guess_row >=  1 and guess_row <= 8:
+    try:
         guess_row = int(input("Please guess a row between 1 and 8: "))
-    return guess_row -1
+        if guess_row <= 8 and guess_row > 0:
+            return guess_row -1
+        else:
+            print("please enter valid row number")
+            guess_row = int(input("Please guess a row between 1 and 8: "))
+            return guess_row -1
+    except ValueError:
+        print("You must guess a number")
+        guess_row = int(input("Please guess a row between 1 and 8: "))
+        return guess_row -1
+
 
 def get_ship_column():
     """
@@ -151,7 +180,7 @@ def get_player_coordinate():
     """
     Store the players guess as a list
     """
-    player_row_column = [get_ship_row() ,get_ship_column()]
+    player_row_column = [get_ship_row(), get_ship_column()]
     return player_row_column
 
 
@@ -161,12 +190,12 @@ def get_computer_coordinate(board):
     """
     not_a_miss = False
     while not not_a_miss:
-        row, col = randint(0,7), randint(0,7)
+        row, col = randint(0, 7), randint(0, 7)
         if get_coordinate_value(board, row, col) != "*":
             not_a_miss = True
     return [row, col]
 
- 
+
 def make_a_move(board, coordinate):
     """
     Print guess coordinates to choosen board
@@ -186,14 +215,6 @@ def make_a_move(board, coordinate):
     return board
 
 
-def check_win(board):
-    """
-    Check if all ships have been hit
-    """
-    if hit_ships(board) == 1:
-        print(f"Game Over! all ship on have been sunk!")
-
-
 def hit_ships(board):  
     """
     Count the amount of hits on chosen board
@@ -206,16 +227,24 @@ def hit_ships(board):
     return count
 
 
-def print_winner(winner):
+def check_win(board):
+    """
+    Check if all ships have been hit
+    """
+    if hit_ships(board) == 10:
+        print(f"Game Over! all ship on have been sunk!")
+
+
+def print_winner(winner, player_board, opponent_board):
     """
     Prints winner when all ships on either board are sunk
     """
-    if winner == "Player":
-        return "Congratulations! You Win!"
-    elif winner == "Opponent":
-        return "You Lose!, Better luck next time."
+    if winner == "Player" or hit_ships(player_board) < hit_ships(opponent_board):
+        print("Congratulations! You Win!")
+    elif winner == "Opponent" or hit_ships(player_board) > hit_ships(opponent_board):
+        print("You Lose!, Better luck next time.")
     else:
-        return "It's a Draw, Try again"
+        print("It's a Draw, Try again")
 
 
 def run_game(turns, player_board, opponent_board):
@@ -224,42 +253,47 @@ def run_game(turns, player_board, opponent_board):
     while turns > 0:
         # Players turn
         coordinate = get_player_coordinate() 
-        if opponent_board == None:
+        if opponent_board is None:
             break # restart if coordinate already selected
         make_a_move(opponent_board, coordinate)
         if check_win(opponent_board):
             return "Player"
-       
+   
         # Computers turn
         coordinate = get_computer_coordinate(player_board)
         make_a_move(player_board, coordinate)
         if check_win(player_board):
             return "Opponent"
-    
+
         print_board(opponent_board, opponent=True)
         print_board(player_board)
+        print(f"Opponents hits: {hit_ships(player_board)}")
+        print(f"Player hits: {hit_ships(opponent_board)}")
         turns -= 1
+        print(f"Turns remaining: {turns}")
     return "Draw"
-  
+
 
 def main():
-    #  = empty place
-    # - = a missed shot
-    # * = a hit shot
-    # # = location of your ship
+    """
+    Calls all functions needed to run game
+    """
+    
     opponent_board = [[" "] * 8 for x in range(8)]
     player_board = [[" "] * 8 for x in range(8)]
-    ships = [2,4,4]
-
+    ships = [2, 4, 4]
+    print("  = empty place")
+    print("- = a missed shot")
+    print("* = a hit shot")
+    print("# = location of your ship")
     opponent_board = create_ships(opponent_board, ships)
     player_board = create_ships(player_board, ships)
 
     print_board(opponent_board, opponent=True)
     print_board(player_board)
 
-    winner = run_game(10, player_board, opponent_board)
-    print("hello")
-    print_winner(winner)
+    winner = run_game(20, player_board, opponent_board)
+    print_winner(winner, player_board, opponent_board)
 
     
 main()
