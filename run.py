@@ -134,25 +134,20 @@ def get_ship_row():
     """
     Allow player to input a guess for row value
     """
-    row_heading = [1, 2, 3, 4, 5, 6, 7, 8]
-    guess_row = int(input("Please guess a row between 1 and 8: "))
-    for i in row_heading:
-        return row_heading[guess_row] -2
-    while guess_row not in row_heading:
-        print("Please enter a valid row")
-        guess_row = input("Please guess a row between 1 and 8: ")
-        return row_heading[guess_row] -2
+    guess_row = 0
+    while not guess_row >=  1 and guess_row <= 8:
+        guess_row = int(input("Please guess a row between 1 and 8: "))
+    return guess_row -1
 
 def get_ship_column():
     """
     Allow player to input a guess for column value
     """
-    column_dict = {"A": 1, "B": 2, "C": 3, "D": 4, "E": 5, "F": 6, "G": 7, "H": 8}
-    guess_column = input("Please guess a column A-H: ")
+    column_dict = {"A": 0, "B": 1, "C": 2, "D": 3, "E": 4, "F": 5, "G": 6, "H": 7}
+    guess_column = None
     while guess_column not in column_dict.keys():
-        print("Please enter a valid column (A-H): ")
         guess_column = input("Please guess a column A-H: ")
-    return column_dict[guess_column]-1
+    return column_dict[guess_column]
 
 
 def get_player_coordinate():
@@ -163,14 +158,18 @@ def get_player_coordinate():
     return player_row_column
 
 
-def get_computer_coordinate():
+def get_computer_coordinate(board):
     """
     Generates random coordinates for computer guess
     """
-    computer_row_column = [randint(1,8), randint(1,8)]
-    return computer_row_column
+    not_a_miss = False
+    while not not_a_miss:
+        row, col = randint(0,7), randint(0,7)
+        if get_coordinate_value(board, row, col) != "*":
+            not_a_miss = True
+    return [row, col]
 
-
+ 
 def make_a_move(board, coordinate):
     """
     Print guess coordinates to choosen board
@@ -178,11 +177,11 @@ def make_a_move(board, coordinate):
     row = coordinate[0]
     col = coordinate[1]
     if get_coordinate_value(board, row, col) == " ":
-        print("It's a miss!")
         board[row][col] = "-"
+        print("It's a miss!")
     elif get_coordinate_value(board, row, col) == "#":
-        print("Congratulations, It's a hit!")
         board[row][col] = "X"
+        print("It's a hit!")
     elif get_coordinate_value(board, row, col) == "-":
         print("Positioned already guessed!")
         return None
@@ -194,7 +193,7 @@ def check_win(board):
     """
     Check if all ships have been hit
     """
-    if hit_ships(board) == 10:
+    if hit_ships(board) == 1:
         print(f"Game Over! all ship on have been sunk!")
 
 
@@ -209,29 +208,54 @@ def hit_ships(board):
                 count += 1
     return count
 
+
+#def determine_winner(board_1, board_2):
+ #   """
+  #  Finds which player has won game
+   # """
+    #if hit_ships(board_1) == 1:
+     #   return "player"
+    #elif hit_ships(board_2) == 1:
+     #   return "comp"
+
+
+def print_winner(winner):
+    """
+    Prints winner when all ships on either board are sunk
+    """
+    if winner == "Player":
+        return "Congratulations! You Win!"
+    elif winner == "Opponent":
+        return "You Lose!, Better luck next time."
+    else:
+        return "It's a Draw, Try again"
+
+
 def run_game(turns, player_board, opponent_board):
     """Runs the main game loop"""
 
     while turns > 0:
         # Players turn
-        coordinate = get_player_coordinate()
-        make_a_move(player_board, coordinate)
-        if player_board == None:
-            break # restart if coordinate already selected
-        if check_win(player_board):
-            turns -= 1
-            return player_board
-        # Computers turn
-        coordinate = get_computer_coordinate()
-        make_a_move(opponent_board, coordinate)
+        coordinate = get_player_coordinate() 
         if opponent_board == None:
             break # restart if coordinate already selected
+        make_a_move(opponent_board, coordinate)
         if check_win(opponent_board):
-            turns -= 1
-            return opponent_board
+            return "Player"
+       
+        # Computers turn
+        coordinate = get_computer_coordinate(player_board)
+        make_a_move(player_board, coordinate)
+        if check_win(player_board):
+            return "Opponent"
     
         print_board(opponent_board, opponent=True)
         print_board(player_board)
+        turns -= 1
+    return "Draw"
+
+
+
 
     # print(f"Welcome to Battleship! You have {turns} to try beat hit as many ships as possible")
     # while turns > 0:
@@ -255,6 +279,7 @@ def run_game(turns, player_board, opponent_board):
     #         print("All ships have been sunk, Congratulations, You win!")
     #         break
     # print("You have used all your turns, Game Over!")  
+
 
 def main():
 
